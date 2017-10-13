@@ -8,14 +8,13 @@ from DbManager import DbManager
 configDir = os.path.dirname(os.path.realpath(__file__)) + "/config"
 
 try:
-    dbConfig = Config.readDB(configDir + "/db.yml.dist")
+    dbConfig = Config.readDB(configDir + "/db.yml")
 except FileNotFoundError as e:
     dbConfig = False
 
 if not dbConfig:
     print("No Database configuration found!")
     exit()
-
 
 dbManager = DbManager(dbConfig['host'], dbConfig['dbName'])
 
@@ -39,6 +38,7 @@ scraper = Scraper()
 lastDate = False
 while True:
     data = scraper.getTicker()
+
     if lastDate != data['date']:
         lastDate = data['date']
         dbManager.saveFund(data)

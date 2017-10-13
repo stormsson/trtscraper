@@ -1,4 +1,3 @@
-import pymongo
 from pymongo import MongoClient
 
 FUND_COLLECTION = "fund"
@@ -7,8 +6,6 @@ class DbManager:
         self.host = host
         self.user = user
         self.password = password
-
-
 
         try:
             self.client = MongoClient('localhost', 27017)
