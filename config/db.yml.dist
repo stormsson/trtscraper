@@ -1,3 +1,4 @@
-host:
-user:
-pass:
+host: localhost
+user: username
+pass: password
+dbName: dbName
