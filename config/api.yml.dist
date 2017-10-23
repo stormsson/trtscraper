@@ -1,2 +1,7 @@
 api_key:
 api_secret:
+twitter:
+    consumer_key:
+    consumer_secret:
+    token:
+    token_secret:

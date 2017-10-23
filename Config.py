@@ -7,3 +7,8 @@ class Config:
         with open(path) as f:
             dbConfig = yaml.safe_load(f)
         return dbConfig
+
+    def readFile(path):
+        with open(path) as f:
+            cfg = yaml.safe_load(f)
+        return cfg

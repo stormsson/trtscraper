@@ -2,6 +2,8 @@ from pymongo import MongoClient
 
 FUND_COLLECTION = "fund"
 ORDERBOOK_COLLECTION = "orderbook"
+WHALECALLS_COLLECTION = "whalecalls"
+
 class DbManager:
     def __init__(self, host, dbName, user=False, password=False ):
         self.host = host
@@ -22,9 +24,11 @@ class DbManager:
 
         self.fundCollection = self.db[FUND_COLLECTION]
         self.orderbookCollection = self.db[ORDERBOOK_COLLECTION]
+        self.whaleCallsCollection = self.db[WHALECALLS_COLLECTION]
 
         # self.fundCollection.remove()
         # self.orderbookCollection.remove()
+        # self.whaleCallsCollection.remove()
         # exit()
 
 
@@ -35,6 +39,15 @@ class DbManager:
     def saveOrderBook(self, data):
         last_id = self.orderbookCollection.insert_one(data).inserted_id
         return last_id
+
+    def saveWhaleCalls(self, data):
+        if isinstance(data, dict):
+            last_id = self.whaleCallsCollection.insert_one(data).inserted_id
+            return last_id
+
+        if isinstance(data, list):
+            result = self.whaleCallsCollection.insert_many(data)
+            return result.inserted_ids
 
 
 

@@ -1,3 +1,4 @@
 pymongo
 PyYAML
 requests
+python-twitter
