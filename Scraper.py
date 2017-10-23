@@ -3,7 +3,7 @@ import datetime
 
 # http://docs.python-requests.org/en/v0.5.0/api/
 class Scraper:
-    MAX_ORDERBOOK_LENGTH = 10
+    MAX_ORDERBOOK_LENGTH = 20
     baseDomain = "https://api.therocktrading.com/v1"
     def __init__(self,api_key=False, api_secret=False):
         self.api_key=api_key
