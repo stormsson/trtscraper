@@ -13,7 +13,7 @@ WCAnalyzer = WhaleCallsAnalyzer()
 twitterDateFormat = '%a %b %d %H:%M:%S %z %Y'
 
 def scrapeWhaleCalls(scraper, dbManager):
-    max_tweet = 100
+    max_tweet = 10
     tweets = scraper.GetUserTimeline(screen_name="whalecalls", count=max_tweet)
 
     records_to_insert = []
