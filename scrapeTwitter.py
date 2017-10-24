@@ -11,19 +11,23 @@ from utils.WhaleCallsAnalyzer import WhaleCallsAnalyzer
 
 WCAnalyzer = WhaleCallsAnalyzer()
 twitterDateFormat = '%a %b %d %H:%M:%S %z %Y'
-lastWhaleCallsIds = []
 
-def scrapeWhaleCalls(scraper):
-    tweets = scraper.GetUserTimeline(screen_name="whalecalls", count=10)
+def scrapeWhaleCalls(scraper, dbManager):
+    max_tweet = 100
+    tweets = scraper.GetUserTimeline(screen_name="whalecalls", count=max_tweet)
 
     records_to_insert = []
 
-    # last count items
-    lastWhaleCallsIds = lastWhaleCallsIds[-count:]
+    tw_ids = [ t.id_str for t in tweets ]
+    found_ids_cursor = dbManager.findWhaleCallsByIds(tw_ids)
+
+    found_ids = [ item["id_str"] for item in found_ids_cursor]
+
+
 
     for t in tweets:
-        if t.id not in lastWhaleCallsIds:
-            lastWhaleCallsIds.append(t.id)
+        if t.id_str not in found_ids:
+
             record = WCAnalyzer.analyze(t.text)
 
 
@@ -67,7 +71,7 @@ twitterScraper = TwitterScraper(
 
 
 while True:
-    new_posts = scrapeWhaleCalls(twitterScraper)
+    new_posts = scrapeWhaleCalls(twitterScraper, dbManager)
     if len(new_posts):
         dbManager.saveWhaleCalls(new_posts)
-    sleep(60)
+    time.sleep(60)

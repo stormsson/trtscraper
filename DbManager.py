@@ -49,6 +49,9 @@ class DbManager:
             result = self.whaleCallsCollection.insert_many(data)
             return result.inserted_ids
 
+    def findWhaleCallsByIds(self, ids):
+        return self.whaleCallsCollection.find({ "id_str" : {"$in": ids} })
+
 
 
 
