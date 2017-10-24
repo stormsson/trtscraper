@@ -25,7 +25,7 @@ class WhaleCallsAnalyzer:
         if liquidatedLongRE:
             result = {}
             result["who"] = liquidatedLongRE.group(1)
-            result["amount"] = liquidatedLongRE.group(2)
+            result["amount"] = int(liquidatedLongRE.group(2))
             result["action"] = "liquidated"
             # result["value"] = liquidatedLongRE.group(3)
             return result
