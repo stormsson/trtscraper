@@ -1,5 +1,6 @@
 import requests
 import datetime
+import time
 
 # http://docs.python-requests.org/en/v0.5.0/api/
 class Scraper:
@@ -21,6 +22,10 @@ class Scraper:
         last_colon_position = data['date'].rfind(":")
         data['date'] = data['date'][:last_colon_position] + data['date'][last_colon_position+1:]
         data['date'] = datetime.datetime.strptime(data['date'], dateFormat)
+
+        now_date_format = '%Y-%m-%dT%H:%M:%S %z'
+        data['created_at'] = time.strftime(now_date_format, time.localtime())
+        data['created_at'] = datetime.datetime.strptime(data['created_at'], now_date_format)
         return data
 
     def sanitizeOrderBookData(self, data):
