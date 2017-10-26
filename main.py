@@ -40,16 +40,15 @@ lastOrderbookDate = False
 while True:
     data = scraper.getTicker()
 
-    if lastTickerDate != data['date']:
-        lastTickerDate = data['date']
-        dbManager.saveFund(data)
-        # print("saving ticker")
+    lastTickerDate = data['date']
+    dbManager.saveFund(data)
+    # print("saving ticker")
 
-        # if the ticker is updated, save the corresponding orderbook
-        orderBookData = scraper.getOrderBook()
-        lastOrderbookDate = orderBookData['date']
-        dbManager.saveOrderBook(orderBookData)
-        # print("saving orderbook %s" % orderBookData['date'])
+    # if the ticker is updated, save the corresponding orderbook
+    orderBookData = scraper.getOrderBook()
+    lastOrderbookDate = orderBookData['date']
+    dbManager.saveOrderBook(orderBookData)
+    # print("saving orderbook %s" % orderBookData['date'])
 
     time.sleep(5)
 

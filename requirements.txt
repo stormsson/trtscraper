@@ -2,3 +2,4 @@ pymongo
 PyYAML
 requests
 python-twitter
+numpy
