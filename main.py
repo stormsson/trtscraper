@@ -1,7 +1,7 @@
 import time
 import os
 
-from Scraper import Scraper
+from TRTApi import TRTApi
 from Config import Config
 from DbManager import DbManager
 
@@ -18,7 +18,7 @@ if not dbConfig:
 
 dbManager = DbManager(dbConfig['host'], dbConfig['dbName'])
 
-scraper = Scraper()
+scraper = TRTApi()
 
 """
 'open': 4059.15,
@@ -38,14 +38,24 @@ scraper = Scraper()
 lastTickerDate = False
 lastOrderbookDate = False
 while True:
-    data = scraper.getTicker()
+    data = {}
+    orderBookData = {}
+
+    try:
+        data = scraper.getTicker()
+        orderBookData = scraper.getOrderBook()
+    except Exception as e:
+        print("Cannot request getTicker() or getOrderBook()")
+        time.sleep(5)
+        continue
 
     lastTickerDate = data['date']
     dbManager.saveFund(data)
+
     # print("saving ticker")
 
     # if the ticker is updated, save the corresponding orderbook
-    orderBookData = scraper.getOrderBook()
+
     lastOrderbookDate = orderBookData['date']
     dbManager.saveOrderBook(orderBookData)
     # print("saving orderbook %s" % orderBookData['date'])
