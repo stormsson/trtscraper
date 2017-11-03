@@ -66,6 +66,11 @@ class DbManager:
             inclusion_parameter: date_to
         } })
 
+    def getLastFund(self, fund_id):
+        res = self.fundCollection.find().sort("date", -1).limit(1)[0]
+        return res
+
+
 
 # ORDERBOOK
     def saveOrderBook(self, data):
