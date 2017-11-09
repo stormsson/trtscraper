@@ -1,5 +1,6 @@
 config/*.yml
 .DS_Store
 *.pyc
+*.pickle
 __pycache__
 test.py

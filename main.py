@@ -1,9 +1,14 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+
 import time
 import os
 
 from TRTApi import TRTApi
 from Config import Config
 from DbManager import DbManager
+
+from utils.MovingAverageEvaluator import MovingAverageEvaluator
 
 configDir = os.path.dirname(os.path.realpath(__file__)) + "/config"
 
@@ -19,6 +24,8 @@ if not dbConfig:
 dbManager = DbManager(dbConfig['host'], dbConfig['dbName'])
 
 scraper = TRTApi()
+
+movingAverageEvaluator = MovingAverageEvaluator(dbManager)
 
 """
 'open': 4059.15,
@@ -48,6 +55,16 @@ while True:
         print("Cannot request getTicker() or getOrderBook()")
         time.sleep(5)
         continue
+
+    try:
+        data["avg_15min"] = movingAverageEvaluator.evalAverageFromDate(
+            data["fund_id"],
+            start=data["created_at"],
+            window_minutes=15,
+            avg_field="last"
+        )
+    except Exception as e:
+        raise e
 
     lastTickerDate = data['date']
     dbManager.saveFund(data)

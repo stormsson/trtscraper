@@ -1,10 +1,13 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+
 from pymongo import MongoClient
 
 FUND_COLLECTION = "fund"
 ORDERBOOK_COLLECTION = "orderbook"
 WHALECALLS_COLLECTION = "whalecalls"
 
-FUND_CACHE_SIZE = 5
+FUND_CACHE_SIZE = 0
 
 class DbManager:
     fundCache = []
@@ -43,11 +46,16 @@ class DbManager:
 
 # FUNDS
     def saveFund(self, data):
-        if len(self.fundCache) >= FUND_CACHE_SIZE:
-            result = self.fundCollection.insert_many(self.fundCache)
-            self.fundCache = []
+        if FUND_CACHE_SIZE:
+            if len(self.fundCache) >= FUND_CACHE_SIZE:
+                result = self.fundCollection.insert_many(self.fundCache)
+                self.fundCache = []
+            else:
+                self.fundCache.append(data)
         else:
-            self.fundCache.append(data)
+            result = self.fundCollection.insert_one(data)
+
+
 
         return
         # last_id = self.fundCollection.insert_one(data).inserted_id
@@ -67,7 +75,7 @@ class DbManager:
         } })
 
     def getLastFund(self, fund_id):
-        res = self.fundCollection.find().sort("date", -1).limit(1)[0]
+        res = self.fundCollection.find().sort("created_at", -1).limit(1)[0]
         return res
 
 
