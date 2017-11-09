@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+
 from pymongo import MongoClient
 
 FUND_COLLECTION = "fund"
@@ -67,7 +70,7 @@ class DbManager:
         } })
 
     def getLastFund(self, fund_id):
-        res = self.fundCollection.find().sort("date", -1).limit(1)[0]
+        res = self.fundCollection.find().sort("created_at", -1).limit(1)[0]
         return res
 
 
