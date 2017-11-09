@@ -7,7 +7,7 @@ FUND_COLLECTION = "fund"
 ORDERBOOK_COLLECTION = "orderbook"
 WHALECALLS_COLLECTION = "whalecalls"
 
-FUND_CACHE_SIZE = 5
+FUND_CACHE_SIZE = 0
 
 class DbManager:
     fundCache = []
@@ -46,11 +46,16 @@ class DbManager:
 
 # FUNDS
     def saveFund(self, data):
-        if len(self.fundCache) >= FUND_CACHE_SIZE:
-            result = self.fundCollection.insert_many(self.fundCache)
-            self.fundCache = []
+        if FUND_CACHE_SIZE:
+            if len(self.fundCache) >= FUND_CACHE_SIZE:
+                result = self.fundCollection.insert_many(self.fundCache)
+                self.fundCache = []
+            else:
+                self.fundCache.append(data)
         else:
-            self.fundCache.append(data)
+            result = self.fundCollection.insert_one(data)
+
+
 
         return
         # last_id = self.fundCollection.insert_one(data).inserted_id
