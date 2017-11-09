@@ -26,6 +26,8 @@ def scrapeWhaleCalls(scraper, dbManager):
 
     found_ids = [ item["id_str"] for item in found_ids_cursor]
 
+    del found_ids_cursor
+
 
 
     for t in tweets:
