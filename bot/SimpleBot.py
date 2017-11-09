@@ -27,7 +27,7 @@ class SimpleBot:
         logging.basicConfig(
             filename=self.configuration["logFilePath"],
             format='%(asctime)s - %(levelname)s:%(message)s',
-            datefmt='%Y-%m-%d %H:%M:%S '
+            datefmt='%Y-%m-%d %H:%M:%S',
             level=logging.DEBUG
         )
 
@@ -73,6 +73,11 @@ class SimpleBot:
         current_bid = self.lastRecord["bid"] # da prendere il primo elemento dell'orderbook!!
 
         for p in self.status["positions"]:
+
+            # fare filter nel for:
+            if(p["delete"] == True):
+                continue
+
             selling_price = p["amount"] * current_bid
             selling_fee = selling_price * p["fee_percentage"]
 
@@ -82,8 +87,19 @@ class SimpleBot:
 
 
             if gain > self.status["configuration"]["min_gain_eur"]:
-                logging.info("min_gain_eur reached (%s)!" % gain)
-                sendSellOrder(p, current_bid)
+                # evado l'ordine per intero;
+                # @todo: verificare top N record per invio più ordini, oppure evasione parziale
+                if current_bid["amount"] >= p["amount"]:
+                    logging.info("min_gain_eur reached (%s)!" % gain)
+                    try:
+                        result = sendSellOrder(p, current_bid)
+                        p["delete"] = True
+
+                    except Exception as e:
+                        logging.info("closing position conditions met but could not complete SELL order")
+
+        #cancella tutte le posizioni con "delete" a true
+
 
     def openPositions(self):
 
@@ -95,6 +111,14 @@ class SimpleBot:
             rounded_amount = float("{0:.4f}".format(calculated_amount))
             if firstOrderBookAsk["quantity"] >= rounded_amount:
                 logging.info("open position condition met. opening at %s * %s" % (self.lastRecord["ask"], rounded_amount))
+
+                try:
+                    new_position = sendBuyOrder(rounded_amount, firstOrderBookAsk["ask"])
+                except Exception as e:
+                    logging.info("open position met but could not complete BUY order")
+
+                    raise e
+
         else:
             logging.info("open position condition NOT met. skipping.")
 
@@ -102,22 +126,9 @@ class SimpleBot:
     def setOrderManager(self, orderManager):
         self.orderManager = orderManager
 
-    def run(self):
-
-        if not self.orderManager:
-            raise Exception("OrderManager not set! use setOrderManager() to setup the bot")
-
-        self.lastRecord = self.dbManager.getLastFund(Fund.ID_BTCEUR)
-
-        closePositions()
-
-        if len(self.status["positions"]) < self.status["configuration"]["max_positions"]:
-            logging.info("found %s positions, checking to open new one..." % len(self.status["positions"]))
-            openPositions()
-        else:
-            logging.info("max_positions reached: %s, skipping new positions check", self.status["configuration"]["max_positions"])
 
 
+# STATUS HANDLING
 
     def saveStatus(self):
         try:
@@ -141,3 +152,24 @@ class SimpleBot:
 
         return
 
+
+        def updateStatus(self):
+            pass
+# MAIN
+
+    def run(self):
+
+        if not self.orderManager:
+            raise Exception("OrderManager not set! use setOrderManager() to setup the bot")
+
+        self.lastRecord = self.dbManager.getLastFund(Fund.ID_BTCEUR)
+
+        closePositions()
+        updateStatus()
+
+        if len(self.status["positions"]) < self.status["configuration"]["max_positions"]:
+            logging.info("found %s positions, checking to open new one..." % len(self.status["positions"]))
+            openPositions()
+            updateStatus()
+        else:
+            logging.info("max_positions reached: %s, skipping new positions check", self.status["configuration"]["max_positions"])
