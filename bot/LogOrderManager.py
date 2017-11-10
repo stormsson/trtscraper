@@ -7,9 +7,17 @@ from BaseOrderManager import BaseOrderManager
 
 class LogOrderManager(BaseOrderManager):
     def buy(self, amount, price):
-        logging.warning("Buying %s @ %s" % (amount, price))
+        try:
+            logging.warning("Buying %s @ %s" % (amount, price))
+        except Exception as e:
+            raise e
+
         return True
 
     def sell(self, amount, price):
-        logging.warning("Selling %s @ %s" % (amount, price))
+        try:
+            logging.warning("Selling %s @ %s" % (amount, price))
+        except Exception as e:
+            raise e
+
         return True

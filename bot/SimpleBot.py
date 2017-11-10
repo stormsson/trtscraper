@@ -17,6 +17,7 @@ class SimpleBot:
         self.status = {}
 
         self.orderManager = False
+        self.dataProxy = False
 
         try:
             self.configuration = Config.readFile(self.configurationFilePath)
@@ -32,21 +33,35 @@ class SimpleBot:
         )
 
 
+        self.initConfiguration()
+
+    def initConfiguration(self):
+        # load status or create a default one
         try:
             self.loadStatus()
-            logging.info("status loaded")
-            logging.debug(self.status)
         except FileNotFoundError as e:
             logging.info("creating default status")
             self.createStartingStatus()
             self.saveStatus()
 
+        # init orderManager
+        try:
+            self.orderManager = __import__(self.configuration["orderManagerClass"])
+        except Exception as e:
+            raise e
+
+        # init dataProxy
+        try:
+            self.dataProxy = __import__(self.configuration["dataProxyClass"])
+        except Exception as e:
+            raise e
 
     def createStartingStatus(self):
         self.status = {
             "configuration": self.configuration,
             "positions":[]
         }
+
 
 # position: {
 #     price: xxx,
@@ -139,5 +154,7 @@ class SimpleBot:
             logging.warning("cannot find status file: %s " % statusFilePath)
             raise e
 
+        logging.info("status loaded")
+        logging.debug(self.status)
         return
 

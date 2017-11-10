@@ -1,5 +1,7 @@
 statusFilePath:
 logFilePath:
+orderManagerClass:
+dataProxyClass:
 max_positions:
 position_eur:
 min_gain_eur:

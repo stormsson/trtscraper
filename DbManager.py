@@ -75,12 +75,16 @@ class DbManager:
         } })
 
     def getLastFund(self, fund_id):
-        res = self.fundCollection.find().sort("created_at", -1).limit(1)[0]
+        res = self.fundCollection.find({"fund_id":fund_id}).sort("created_at", -1).limit(1)[0]
         return res
 
 
 
 # ORDERBOOK
+    def getLastOrderBook(self, fund_id):
+        res = self.orderbookCollection.find({"fund_id":fund_id}).sort("date", -1).limit(1)[0]
+        return res
+
     def saveOrderBook(self, data):
         last_id = self.orderbookCollection.insert_one(data).inserted_id
         return last_id
