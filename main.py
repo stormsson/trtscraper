@@ -66,6 +66,26 @@ while True:
     except Exception as e:
         raise e
 
+    try:
+        data["avg_30min"] = movingAverageEvaluator.evalAverageFromDate(
+            data["fund_id"],
+            start=data["created_at"],
+            window_minutes=30,
+            avg_field="last"
+        )
+    except Exception as e:
+        raise e
+
+    try:
+        data["avg_60min"] = movingAverageEvaluator.evalAverageFromDate(
+            data["fund_id"],
+            start=data["created_at"],
+            window_minutes=60,
+            avg_field="last"
+        )
+    except Exception as e:
+        raise e
+
     lastTickerDate = data['date']
     dbManager.saveFund(data)
 
