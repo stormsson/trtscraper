@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-from BaseDataProxy import BaseDataProxy
-from DBManager import DBManager
+from utils.dataproxy.BaseDataProxy import BaseDataProxy
 
 class DBDataProxy(BaseDataProxy):
 

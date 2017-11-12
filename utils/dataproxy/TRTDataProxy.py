@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 from TRTApi import TRTApi
-from BaseDataProxy import BaseDataProxy
+from utils.dataproxy.BaseDataProxy import BaseDataProxy
 
 class TRTDataProxy(BaseDataProxy):
 
