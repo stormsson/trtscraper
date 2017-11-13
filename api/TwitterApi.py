@@ -3,7 +3,7 @@
 
 import twitter
 
-class TwitterScraper:
+class TwitterApi:
     def __init__(self, consumer_key, consumer_secret, token, token_secret):
         self.consumer_key = consumer_key
         self.consumer_secret = consumer_secret

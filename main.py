@@ -4,9 +4,9 @@
 import time
 import os
 
-from TRTApi import TRTApi
+from api.TRTApi import TRTApi
 from Config import Config
-from DbManager import DbManager
+from DBManager import DBManager
 
 from utils.MovingAverageEvaluator import MovingAverageEvaluator
 
@@ -21,7 +21,7 @@ if not dbConfig:
     print("No Database configuration found!")
     exit()
 
-dbManager = DbManager(dbConfig['host'], dbConfig['dbName'])
+dbManager = DBManager.createDBManager(dbConfig['host'], dbConfig['dbName'])
 
 scraper = TRTApi()
 

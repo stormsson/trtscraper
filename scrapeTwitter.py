@@ -7,8 +7,8 @@ import re
 import datetime
 
 from Config import Config
-from DbManager import DbManager
-from utils.TwitterScraper import TwitterScraper
+from DBManager import DBManager
+from api.TwitterApi import TwitterApi
 from utils.WhaleCallsAnalyzer import WhaleCallsAnalyzer
 
 
@@ -55,7 +55,7 @@ if not dbConfig:
     print("No Database configuration found!")
     exit()
 
-dbManager = DbManager(dbConfig['host'], dbConfig['dbName'])
+dbManager = DBManager.createDBManager(dbConfig['host'], dbConfig['dbName'])
 
 try:
     apiConfig = Config.readDB(configDir + "/api.yml")
@@ -67,7 +67,7 @@ if not apiConfig or not apiConfig['twitter']:
     print("No API configuration found!")
     exit()
 
-twitterScraper = TwitterScraper(
+twitterScraper = TwitterApi(
         apiConfig['twitter']['consumer_key'],
         apiConfig['twitter']['consumer_secret'],
         apiConfig['twitter']['token'],
