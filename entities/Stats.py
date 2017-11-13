@@ -3,7 +3,7 @@
 
 from entities.BaseEntity import BaseEntity
 
-class Fund(BaseEntity):
+class Stats(BaseEntity):
+    ID_BLOCKCHAINSTATS = "blockchain_stats"
 
-    ID_BTCEUR="BTCEUR"
-    ID_ETHEUR="ETHEUR"
+

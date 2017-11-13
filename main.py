@@ -4,9 +4,9 @@
 import time
 import os
 
-from TRTApi import TRTApi
+from api.TRTApi import TRTApi
 from Config import Config
-from DbManager import DbManager
+from DBManager import DBManager
 
 from utils.MovingAverageEvaluator import MovingAverageEvaluator
 
@@ -21,7 +21,7 @@ if not dbConfig:
     print("No Database configuration found!")
     exit()
 
-dbManager = DbManager(dbConfig['host'], dbConfig['dbName'])
+dbManager = DBManager.createDBManager(dbConfig['host'], dbConfig['dbName'])
 
 scraper = TRTApi()
 
@@ -61,6 +61,26 @@ while True:
             data["fund_id"],
             start=data["created_at"],
             window_minutes=15,
+            avg_field="last"
+        )
+    except Exception as e:
+        raise e
+
+    try:
+        data["avg_30min"] = movingAverageEvaluator.evalAverageFromDate(
+            data["fund_id"],
+            start=data["created_at"],
+            window_minutes=30,
+            avg_field="last"
+        )
+    except Exception as e:
+        raise e
+
+    try:
+        data["avg_60min"] = movingAverageEvaluator.evalAverageFromDate(
+            data["fund_id"],
+            start=data["created_at"],
+            window_minutes=60,
             avg_field="last"
         )
     except Exception as e:

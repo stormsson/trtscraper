@@ -6,31 +6,37 @@ from pymongo import MongoClient
 FUND_COLLECTION = "fund"
 ORDERBOOK_COLLECTION = "orderbook"
 WHALECALLS_COLLECTION = "whalecalls"
+STATS_COLLECTION = "stats"
 
 FUND_CACHE_SIZE = 0
 
-class DbManager:
+class DBManager:
     fundCache = []
-    def __init__(self, host, dbName, user=False, password=False ):
-        self.host = host
-        self.user = user
-        self.password = password
 
+    @staticmethod
+    def createDBManager(host, dbName, user=False, password=False):
         try:
-            self.client = MongoClient('localhost', 27017)
-            self.db = self.client[dbName]
+            client = MongoClient('localhost', 27017)
+            db = client[dbName]
         except Exception as e:
             raise e
 
         if user:
             try:
-                self.db.authenticate(user, password)
+                db.authenticate(user, password)
             except Exception as e:
                 raise e
+
+        return DBManager(db)
+
+    def __init__(self,  db):
+
+        self.db = db
 
         self.fundCollection = self.db[FUND_COLLECTION]
         self.orderbookCollection = self.db[ORDERBOOK_COLLECTION]
         self.whaleCallsCollection = self.db[WHALECALLS_COLLECTION]
+        self.statsCollection = self.db[STATS_COLLECTION]
 
         # self.fundCollection.remove()
         # self.orderbookCollection.remove()
@@ -75,12 +81,16 @@ class DbManager:
         } })
 
     def getLastFund(self, fund_id):
-        res = self.fundCollection.find().sort("created_at", -1).limit(1)[0]
+        res = self.fundCollection.find({"fund_id":fund_id}).sort("created_at", -1).limit(1)[0]
         return res
 
 
 
 # ORDERBOOK
+    def getLastOrderBook(self, fund_id):
+        res = self.orderbookCollection.find({"fund_id":fund_id}).sort("date", -1).limit(1)[0]
+        return res
+
     def saveOrderBook(self, data):
         last_id = self.orderbookCollection.insert_one(data).inserted_id
         return last_id
@@ -98,6 +108,15 @@ class DbManager:
     def findWhaleCallsByIds(self, ids):
         return self.whaleCallsCollection.find({ "id_str" : {"$in": ids} })
 
+# STATS
+    def saveStats(self, data):
+        if isinstance(data, dict):
+            last_id = self.statsCollection.insert_one(data).inserted_id
+            return last_id
+
+        if isinstance(data, list):
+            result = self.statsCollection.insert_many(data)
+            return result.inserted_ids
 
 
 

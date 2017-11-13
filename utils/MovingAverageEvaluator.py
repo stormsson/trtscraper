@@ -14,25 +14,30 @@ class MovingAverageEvaluator:
         collection = self.dbManager.db["fund"]
 
         starting_datetime = start - timedelta(minutes=window_minutes)
-        print("searching from: %s" % starting_datetime)
+        # print("searching from: %s" % starting_datetime)
 
         field_value = 0
         cnt = 0
-        for doc in collection.find({
+
+        search_cursor = collection.find({
                 "created_at":{"$gte": starting_datetime},
                 "fund_id": fund_id
-            }).sort('created_at',pymongo.DESCENDING):
-            print(doc)
+            }).sort('created_at',pymongo.DESCENDING)
+
+        for doc in search_cursor:
+            # print(doc)
             field_value = field_value + doc[avg_field]
             if not field_value:
                 field_value = doc[avg_field]
             cnt+=1
 
+        del search_cursor
+
         if not cnt:
             cnt = 1
 
 
-        print("field_value: %s , cnt: %s" % (field_value, cnt))
+        # print("field_value: %s , cnt: %s" % (field_value, cnt))
 
         return field_value/cnt
 
