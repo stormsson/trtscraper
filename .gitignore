@@ -4,3 +4,4 @@ config/*.yml
 *.pickle
 __pycache__
 test.py
+prove.py
