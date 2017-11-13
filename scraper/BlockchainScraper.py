@@ -22,6 +22,7 @@ class BlockchainScraper(object):
             raise e
 
         data["TYPE"] = Stats.ID_BLOCKCHAINSTATS
+        data["SYMBOL"] = "BTC"
 
         return data
 

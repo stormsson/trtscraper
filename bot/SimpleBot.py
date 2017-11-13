@@ -3,7 +3,7 @@
 
 from entities.Fund import Fund
 from Config import Config
-from TRTApi import TRTApi
+from api.TRTApi import TRTApi
 
 
 import os
@@ -28,7 +28,7 @@ class SimpleBot:
         logging.basicConfig(
             filename=self.configuration["logFilePath"],
             format='%(asctime)s - %(levelname)s:%(message)s',
-            datefmt='%Y-%m-%d %H:%M:%S '
+            datefmt='%Y-%m-%d %H:%M:%S',
             level=logging.DEBUG
         )
 
