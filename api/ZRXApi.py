@@ -8,7 +8,6 @@ class ZRXApi:
     # def __init__(self, domain):
     #     self.baseDomain = domain
 
-
     def __init__(self):
         self.lastResponse = False
 

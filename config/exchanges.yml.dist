@@ -1,0 +1,70 @@
+name:
+    api_key:
+    api_secret:
+    supported_coins:
+        - SYMBOL: { withdraw_fee: 0.00n }
+        - SYMBOL: { withdraw_fee: 0.00n, ignore: True, name: SYMBOL_ALT }
+    buy_fee_multiplier:
+    sell_fee_multiplier:
+
+bitfinex:
+    api_key:
+    api_secret:
+    supported_coins:
+      - BTC: { withdraw_fee: 0.0005, ignore: true }
+      - DSH: { withdraw_fee: 0.01, name: DASH }
+      - EOS: { withdraw_fee: 0.1 }
+      - ETH: { withdraw_fee: 0.01 }
+      - IOTA: { withdraw_fee: 0 }
+      - LTC: { withdraw_fee: 0.001 }
+      - NEO: { withdraw_fee: 2 }
+      - OMG: { withdraw_fee: 0.1 }
+      - PPC: { withdraw_fee: 0.2 }
+      - XMR: { withdraw_fee: 0.04, name: MONERO }
+      - XRP: {withdraw_fee: 0.02 }
+    buy_fee_multiplier: 0.002
+    sell_fee_multiplier: 0.002
+
+bittrex:
+  api_key:
+  api_secret:
+  supported_coins:
+    - BTC: { withdraw_fee: 0.0005, ignore: true }
+    - DASH: { withdraw_fee: 0.002 }
+    - DOGE: { withdraw_fee: 2 }
+    - LTC: { withdraw_fee: 0.01 }
+    - PPC: { withdraw_fee: 0.02 }
+    - VTC: { withdraw_fee: 0.02 }
+    - XMR: { withdraw_fee: 0.04, name: MONERO }
+  buy_fee_multiplier: 0.0025
+  sell_fee_multiplier: 0.0025
+
+trt:
+    api_key:
+    api_secret:
+    supported_coins:
+      - BTC: { withdraw_fee: 0.0005, ignore: true }
+      - ETH: { withdraw_fee: 0.001 }
+      - LTC: { withdraw_fee: 0.002 }
+      - PPC: { withdraw_fee: 0.02 }
+    buy_fee_multiplier: 0.002
+    sell_fee_multiplier: 0.002
+
+yobit:
+    api_key:
+    api_secret:
+    supported_coins:
+      - BTC: { withdraw_fee: 0.0008, ignore: true }
+      - DASH: { withdraw_fee: 0.002 }
+      - DOGE: { withdraw_fee: 2 }
+      - EOS: { withdraw_fee: 0.05 }
+      - ETH: { withdraw_fee: 0.001 }
+      - LTC: { withdraw_fee: 0.002 }
+      - OMG: { withdraw_fee: 0.01 }
+      - PPC: { withdraw_fee: 0.2 }
+      - VTC: { withdraw_fee: 0.2 }
+    buy_fee_multiplier: 0.002
+    sell_fee_multiplier: 0.002
+
+
+

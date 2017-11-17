@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-import requests
 import datetime
 import time
 
@@ -15,11 +14,14 @@ class BlockchainApi(BaseApi):
         return self.baseDomain + "/stats"
 
     def sanitizeStatsData(self, data):
-        dateFormat = '%Y-%m-%dT%H:%M:%S.%f%z'
+        now_date_format = '%Y-%m-%dT%H:%M:%S %z'
 
         data['date'] = datetime.datetime.fromtimestamp(
             data['timestamp'] / 1e3
-        ).strftime(dateFormat)
+        )
+
+        data['created_at'] = time.strftime(now_date_format, time.localtime())
+        data['created_at'] = datetime.datetime.strptime(data['created_at'], now_date_format)
 
         return data
 

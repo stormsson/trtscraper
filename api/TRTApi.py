@@ -1,17 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-import requests
 import datetime
 import time
 
+from api.BaseApi import BaseApi
 # http://docs.python-requests.org/en/v0.5.0/api/
-class TRTApi:
+class TRTApi(BaseApi):
     MAX_ORDERBOOK_LENGTH = 20
     baseDomain = "https://api.therocktrading.com/v1"
-    def __init__(self,api_key=False, api_secret=False):
-        self.api_key=api_key
-        self.api_secret=api_secret
 
     def getTickerPath(self, fund="BTCEUR"):
         return self.baseDomain + "/funds/%s/ticker" % fund
@@ -43,7 +40,7 @@ class TRTApi:
 
     def getTicker(self, fund="BTCEUR"):
         try:
-            response = requests.get(self.getTickerPath(fund))
+            response = self.requests.get(self.getTickerPath(fund))
         except Exception as e:
             raise e
 
@@ -51,7 +48,7 @@ class TRTApi:
 
     def getOrderBook(self, fund="BTCEUR"):
         try:
-            response = requests.get(self.getOrderBookPath(fund))
+            response = self.requests.get(self.getOrderBookPath(fund))
         except Exception as e:
             raise e
 
