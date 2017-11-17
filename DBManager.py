@@ -1,13 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-from pymongo import MongoClient
+from pymongo import MongoClient, UpdateOne
+
 
 FUND_COLLECTION = "fund"
 ORDERBOOK_COLLECTION = "orderbook"
 WHALECALLS_COLLECTION = "whalecalls"
 STATS_COLLECTION = "stats"
 COINMARKETCAP_COLLECTION = "coinmarketcap"
+GASDATA_COLLECTION = "gasdata"
 
 FUND_CACHE_SIZE = 0
 
@@ -38,14 +40,8 @@ class DBManager:
         self.orderbookCollection = self.db[ORDERBOOK_COLLECTION]
         self.whaleCallsCollection = self.db[WHALECALLS_COLLECTION]
         self.statsCollection = self.db[STATS_COLLECTION]
-        self.coinMarketcCapCollection = self.db[COINMARKETCAP_COLLECTION]
-
-        # self.fundCollection.remove()
-        # self.orderbookCollection.remove()
-        # self.whaleCallsCollection.remove()
-        # self.statsCollection.remove()
-        # self.coinMarketcCapCollection.remove()
-        # exit()
+        self.coinMarketCapCollection = self.db[COINMARKETCAP_COLLECTION]
+        self.gasDataCollection = self.db[GASDATA_COLLECTION]
 
 
     def DELETEEVERYTHING():
@@ -53,7 +49,8 @@ class DBManager:
         self.orderbookCollection.remove()
         self.whaleCallsCollection.remove()
         self.statsCollection.remove()
-        self.coinMarketcCapCollection.remove()
+        self.coinMarketCapCollection.remove()
+        self.gasDataCollection.remove()
         exit()
 
 # FUNDS
@@ -127,10 +124,25 @@ class DBManager:
 # COINMARKETCAP
     def saveStats(self, data):
         if isinstance(data, dict):
-            last_id = self.coinMarketcCapCollection.insert_one(data).inserted_id
+            last_id = self.coinMarketCapCollection.insert_one(data).inserted_id
             return last_id
 
         if isinstance(data, list):
-            result = self.coinMarketcCapCollection.insert_many(data)
+            result = self.coinMarketCapCollection.insert_many(data)
             return result.inserted_ids
 
+# ETHERCHAIN
+    def saveGasData(self, data):
+        if isinstance(data, dict):
+            raise Exception("DA TESTARE")
+            return last_id
+
+        if isinstance(data, list):
+            bulkop = self.gasDataCollection.initialize_ordered_bulk_op()
+            transactions = []
+            for tx in data:
+                transactions.append(UpdateOne({'hash' : tx["hash"]}, {"$set": tx }, upsert=True))
+
+            result = self.gasDataCollection.bulk_write(transactions)
+
+            return result
