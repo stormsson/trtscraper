@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
+import logging
+
 import dateutil.parser as dateParser
 
 from api.BaseApi import BaseApi
@@ -65,7 +67,9 @@ class EtherchainApi(BaseApi):
         try:
             response = self.requests.get(self.getTransactionsPath(offset, count))
         except Exception as e:
-            raise e
+            logging.error("Cannot get transactions! ")
+            pass
+
 
 
         return self.sanitizeGetTxData(response.json())
