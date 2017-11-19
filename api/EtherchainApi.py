@@ -71,5 +71,10 @@ class EtherchainApi(BaseApi):
             pass
 
 
+        try:
+            result = self.sanitizeGetTxData(response.json())
+        except Exception as e:
+            logging.error("Cannot get transactions! ")
+            result = False
 
-        return self.sanitizeGetTxData(response.json())
+        return result
