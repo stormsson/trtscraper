@@ -7,7 +7,7 @@ import time
 from api.BaseApi import BaseApi
 # http://docs.python-requests.org/en/v0.5.0/api/
 class TRTApi(BaseApi):
-    MAX_ORDERBOOK_LENGTH = 20
+    MAX_ORDERBOOK_LENGTH = 10
     baseDomain = "https://api.therocktrading.com/v1"
 
     def getTickerPath(self, fund="BTCEUR"):
